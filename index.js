@@ -17,3 +17,28 @@ const connection = mysql.createConnection({
   //Desired database
   database: 'employee_tracker_db',
 });
+
+const start = () => {
+  inquirer
+    .prompt({
+      name: 'chooseAction',
+      type: 'list',
+      message: 'Would you like to [VIEW], [ADD], or [UPDATE] a department, role or employee?',
+      choices: ['VIEW', 'ADD', 'UPDATE'],
+    }).then(response => {
+      console.log(response)
+      if(response === 'VIEW'){
+
+      }
+      if(response === 'ADD'){
+
+      }
+      if(response === 'UPDATE')
+    })
+  }
+
+  connection.connect((err) => {
+    if (err) throw err;
+    // run the start function after the connection is made to prompt the user
+    start();
+  });
