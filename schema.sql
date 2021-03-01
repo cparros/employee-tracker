@@ -20,3 +20,9 @@ CREATE TABLE role (
   department_id INT,
   PRIMARY KEY (id)
 )
+
+CREATE TABLE department (
+  id INT,
+  name VARCHAR(30),
+  PRIMARY KEY(id)
+)
