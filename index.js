@@ -19,21 +19,39 @@ const connection = mysql.createConnection({
 });
 
 const start = () => {
-  inquirer
-    .prompt({
+  inquirer.prompt({
       name: 'chooseAction',
       type: 'list',
       message: 'Would you like to [VIEW], [ADD], or [UPDATE] a department, role or employee?',
       choices: ['VIEW', 'ADD', 'UPDATE'],
     }).then(response => {
       console.log(response)
-      if(response === 'VIEW'){
+      if(response.chooseAction === 'VIEW'){
+        inquirer.prompt({
+      name: 'chooseView',
+      type: 'list',
+      message: 'What would you like to view?',
+      choices: ['Departments', 'Roles', 'Employees']
+      }).then(response => {
+        if(response === 'Departments'){
+          console.log('match')
+          connection.query(
+            'SELECT * FROM department', (req, res) => {
+              if(err) throw err;
+              console.table(res)
+            }
+          )
+        }
+      })
 
-      }
+
+    }
       if(response === 'ADD'){
 
       }
-      if(response === 'UPDATE')
+      if(response === 'UPDATE'){
+
+      }
     })
   }
 
