@@ -1,5 +1,15 @@
 const mysql = require('mysql');
 const inquirer = require('inquirer');
+var figlet = require('figlet');
+ 
+figlet('Employee \n Tracker!', function(err, data) {
+    if (err) {
+        console.log('Something went wrong...');
+        console.dir(err);
+        return;
+    }
+    console.log(data)
+});
 
 // create the connection information for the sql database
 const connection = mysql.createConnection({
@@ -33,19 +43,38 @@ const start = () => {
       message: 'What would you like to view?',
       choices: ['Departments', 'Roles', 'Employees']
       }).then(response => {
-        if(response === 'Departments'){
-          console.log('match')
+        console.log(response.chooseView)
+
+        if(response.chooseView === 'Departments'){
           connection.query(
-            'SELECT * FROM department', (req, res) => {
+            'SELECT * FROM department', (err, res) => {
               if(err) throw err;
               console.table(res)
             }
           )
         }
+
+        if(response.chooseView === 'Roles'){
+          connection.query(
+            'SELECT * FROM role', (err, res) => {
+              if(err) throw err;
+              console.table(res)
+            }
+          )
+        }
+        if(response.chooseView === 'Employees'){
+          connection.query(
+            'SELECT * FROM employee', (err, res) => {
+              if(err) throw err;
+              console.table(res)
+            }
+          )
+        }
+        connection.end()
       })
-
-
     }
+
+
       if(response === 'ADD'){
 
       }
