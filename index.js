@@ -36,6 +36,8 @@ const start = () => {
       choices: ['VIEW', 'ADD', 'UPDATE'],
     }).then(response => {
       console.log(response)
+
+      //VIEW Selection
       if(response.chooseAction === 'VIEW'){
         inquirer.prompt({
       name: 'chooseView',
@@ -44,7 +46,7 @@ const start = () => {
       choices: ['Departments', 'Roles', 'Employees']
       }).then(response => {
         console.log(response.chooseView)
-
+        //View Depts
         if(response.chooseView === 'Departments'){
           connection.query(
             'SELECT * FROM department', (err, res) => {
@@ -53,7 +55,7 @@ const start = () => {
             }
           )
         }
-
+        //View Roles
         if(response.chooseView === 'Roles'){
           connection.query(
             'SELECT * FROM role', (err, res) => {
@@ -62,6 +64,7 @@ const start = () => {
             }
           )
         }
+        //View Eployees
         if(response.chooseView === 'Employees'){
           connection.query(
             'SELECT * FROM employee', (err, res) => {
@@ -75,7 +78,42 @@ const start = () => {
     }
 
 
-      if(response === 'ADD'){
+      if(response.chooseAction === 'ADD'){
+        console.log(response)
+        inquirer.prompt(
+          {
+          name: 'chooseAdd',
+          type: 'list',
+          message: 'What would you like to add to?',
+
+          choices: ['Departments', 'Roles', 'Employees']
+          },
+          ).then(response => {
+            console.log(response.chooseAdd)
+            if(response.chooseAdd === 'Departments'){
+              inquirer.prompt(
+                {
+                  type: 'input',
+                  message: 'Please enter the department name',
+                  name: 'deptName'
+                }
+              ).then(response => {
+                connection.query(`INSERT INTO department (name) VALUE ('${response.deptName}')`, (err, res) => {
+                  if(err) throw err;
+                  console.table(res)
+                })
+              })
+              
+            }
+
+            if(response.chooseAdd === 'Roles'){
+              
+            }
+
+            if(response.chooseAdd === 'Employees'){
+              
+            }
+          })
 
       }
       if(response === 'UPDATE'){
