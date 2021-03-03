@@ -1,3 +1,4 @@
+
 const mysql = require('mysql');
 const inquirer = require('inquirer');
 var figlet = require('figlet');
@@ -32,7 +33,7 @@ const start = () => {
   inquirer.prompt({
       name: 'chooseAction',
       type: 'list',
-      message: 'Would you like to [VIEW], [ADD], or [UPDATE] a department, role or employee?',
+      message: 'WELCOME to your employee tracking system! Would you like to [VIEW], [ADD], or [UPDATE] a department, role, or employee?',
       choices: ['VIEW', 'ADD', 'UPDATE'],
     }).then(response => {
       console.log(response)
@@ -85,7 +86,6 @@ const start = () => {
           name: 'chooseAdd',
           type: 'list',
           message: 'What would you like to add to?',
-
           choices: ['Departments', 'Roles', 'Employees']
           },
           ).then(response => {
@@ -98,20 +98,73 @@ const start = () => {
                   name: 'deptName'
                 }
               ).then(response => {
-                connection.query(`INSERT INTO department (name) VALUE ('${response.deptName}')`, (err, res) => {
+                connection.query(`INSERT INTO department (name) VALUE (?)`, [response.deptName], (err, res) => {
                   if(err) throw err;
                   console.table(res)
+                connection.query('SELECT * FROM department', (err, res) => {
+                  if(err) throw err;
+                  console.table(res)
+                  })
                 })
               })
               
             }
 
             if(response.chooseAdd === 'Roles'){
-              
+              inquirer.prompt([
+                {
+                  type: 'list',
+                  message: 'Please enter the roles\'s title.',
+                  choices: ['Sales Lead' , 'Sales Person', 'Lead Engineer', 'Software Engineer', 'Account Manager', 'Accountant', 'Legal Team Lead', 'Lawyer'],
+                  name: 'roleTitle'
+                },
+                {
+                  type: 'input',
+                  message: 'Please enter the role\'s salary.',
+                  name: 'roleSalary'
+                },
+                {
+                  type: 'list',
+                  message: 'Please enter the roles\'s department ID.',
+                  name: 'roleId',
+                  choices: [1, 2, 3, 4, 5, 6, 7]
+                }
+              ]).then(response => {
+                console.log(response)
+                connection.query('INSERT INTO role ( title, salary, department_id) VALUE (?,?,?)', [response.roleTitle, response.roleSalary, response.roleId], (err, res) => {
+                  if(err) throw err;
+                  console.table(res)
+                })
+              })
+
+
             }
 
             if(response.chooseAdd === 'Employees'){
-              
+              inquirer.prompt([
+                {
+                  type: 'input',
+                  message: 'What is your employee\'ss first name?',
+                  name: 'firstName'
+                },
+                {
+                  type: 'input',
+                  message: 'What is your employee\'ss last name?',
+                  name: 'lastName'
+                },
+                {
+                  type: 'input',
+                  message: 'What is your employee\'ss role ID?',
+                  name: 'employeeRoleId'
+                },
+                {
+                  type: 'input',
+                  message: 'What is your employee\'s manager ID',
+                  name: 'employeeManagerId'
+                },
+              ]).then(response => {
+                connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE (?,?,?,?)')
+              })
             }
           })
 
