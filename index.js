@@ -134,6 +134,10 @@ const start = () => {
                 connection.query('INSERT INTO role ( title, salary, department_id) VALUE (?,?,?)', [response.roleTitle, response.roleSalary, response.roleId], (err, res) => {
                   if(err) throw err;
                   console.table(res)
+                  connection.query('SELECT * from role', (err, res) => {
+                    if(err) throw err;
+                    console.table(res)
+                  })
                 })
               })
 
@@ -163,16 +167,36 @@ const start = () => {
                   name: 'employeeManagerId'
                 },
               ]).then(response => {
-                connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE (?,?,?,?)')
+                connection.query('INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUE (?,?,?,?)', [response.firstName, response.lastName, response.employeeRoleId, response.employeeManagerId], (err,res) => {
+                  if(err) throw err;
+                  console.table(res)
+                  connection.query('SELECT * FROM employee', (err, res) => {
+                    if(err) throw err;
+                    console.table(res)
+                  })
+                })
               })
             }
           })
 
       }
       if(response === 'UPDATE'){
+        if(response.chooseAction === 'UPDATE'){
+          console.log(response)
+          inquirer.prompt(
+            {
+            name: 'chooseUpdate',
+            type: 'list',
+            message: 'What would you like to update?',
+            choices: ['Departments', 'Roles', 'Employees']
+            },
+            ).then(response => {
+              if(response.chooseUpdate === 'Departments') {
 
+              }
+            })
       }
-    })
+    }})
   }
 
   connection.connect((err) => {
