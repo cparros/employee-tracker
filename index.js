@@ -131,6 +131,7 @@ const start = () => {
                 }
               ]).then(response => {
                 console.log(response)
+
                 connection.query('INSERT INTO role ( title, salary, department_id) VALUE (?,?,?)', [response.roleTitle, response.roleSalary, response.roleId], (err, res) => {
                   if(err) throw err;
                   console.table(res)
@@ -180,23 +181,97 @@ const start = () => {
           })
 
       }
-      if(response === 'UPDATE'){
+
+     
         if(response.chooseAction === 'UPDATE'){
-          console.log(response)
-          inquirer.prompt(
+          inquirer.prompt([
             {
             name: 'chooseUpdate',
             type: 'list',
             message: 'What would you like to update?',
             choices: ['Departments', 'Roles', 'Employees']
+            }
+            ]).then(response => {
+             
+              if(response.chooseUpdate === 'Departments') { 
+                inquirer.prompt([  
+            {
+            type: 'list',
+            message: 'What department would you like to update?',
+            choices: ['Sales', 'Legal', 'Finance', 'Engineering'],
+            name: 'chooseDepartment',
             },
-            ).then(response => {
-              if(response.chooseUpdate === 'Departments') {
+            {
+            type: 'input',
+            message: 'Please enter the desired update',
+            name: 'enterDeptChange',
+            }
+          ]).then( response =>{
+                connection.query('UPDATE department SET name = ? WHERE name = ?',[response.enterDeptChange, response.enterDeptChange], (err, res) => {
+                  if(err) throw err;
+                  console.log('Update successful!')
+                })
 
+                connection.query('SELECT * from department', (err, res) => {
+                  if(err) throw err;
+                  console.table(res)
+                  })
+                })
               }
+
+
+        if(response.chooseUpdate === 'Roles') {
+          connection.query('SELECT * FROM role', (err, res) =>{
+            if(err) throw err;
+            console.table(res)
+          })
+
+          inquirer.prompt([  
+            {
+            type: 'input',
+            message: 'What role title would you like to update?',
+            name: 'chooseRoleTitle',
+            },
+            {
+              type: 'input',
+              message: 'What is the role ID you would like to update?',
+              name: 'chooseRoleId',
+              },
+            {
+            type: 'input',
+            message: 'Please enter the updated role title',
+            name: 'enterRoleTitle',
+            },
+            {
+              type: 'input',
+              message: 'Please enter the updated role salary',
+              name: 'enterRoleSalary',
+              }
+          ]).then(response => {
+            
+            connection.query('SELECT * from role', (err, res) => {
+              if(err) throw err
+              console.table(res)
             })
+
+            connection.query('UPDATE role SET title = ?, salary = ? WHERE id = ?', [response.enterRoleTitle, response.enterRoleSalary, response.chooseRoleId,])
+            
+            connection.query('SELECT * from role', (err, res) => {
+            if(err) throw err
+            console.table(res)
+          })
+          })
+          
+        }
+        
+        if(response.chooseUpdate === 'Employees') {
+
+        }
+
+
+        })
       }
-    }})
+    })
   }
 
   connection.connect((err) => {
