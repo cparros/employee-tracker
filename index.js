@@ -248,7 +248,7 @@ const start = () => {
               name: 'enterRoleSalary',
               }
           ]).then(response => {
-            
+
             connection.query('SELECT * from role', (err, res) => {
               if(err) throw err
               console.table(res)
@@ -265,6 +265,40 @@ const start = () => {
         }
         
         if(response.chooseUpdate === 'Employees') {
+            connection.query('SELECT * FROM employee', (err, res) =>{
+            if(err) throw err;
+            console.table(res)
+          })
+
+          inquirer.prompt([  
+            {
+            type: 'input',
+            message: 'What is the ID of the employee you would like to update?',
+            name: 'chooseEmployeeId',
+            },
+            {
+              type: 'input',
+              message: 'What is the new role ID you would like to update?',
+              name: 'chooseEmployeeRoleId',
+              }
+          ]).then(response => {
+            
+            connection.query('SELECT * from role', (err, res) => {
+              if(err) throw err
+              console.table(res)
+            })
+
+            connection.query('UPDATE employee SET role_id = ?, WHERE id = ?', [response.chooseEmployeeRoleId, response.chooseEmployeeId])
+            
+            connection.query('SELECT * from role', (err, res) => {
+            if(err) throw err
+            console.table(res)
+          })
+          })
+
+
+
+
 
         }
 
