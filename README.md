@@ -7,7 +7,7 @@ Future updates will include budget funcinality, as well as updating and viewing 
 
 It is a part of UNC Coding Bootcamp and is practice in writing and using mysql.
 
-[Instructional Video](https://drive.google.com/file/d/1gatuizWuNMWqL-xjf3FoBmM8YMSPkECM/view)
+[Instructional Video](Video will go here)
 
 ## Installation
 
