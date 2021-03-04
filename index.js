@@ -283,14 +283,14 @@ const start = () => {
               }
           ]).then(response => {
             
-            connection.query('SELECT * from role', (err, res) => {
+            connection.query('SELECT * from employee', (err, res) => {
               if(err) throw err
               console.table(res)
             })
 
-            connection.query('UPDATE employee SET role_id = ?, WHERE id = ?', [response.chooseEmployeeRoleId, response.chooseEmployeeId])
+            connection.query('UPDATE employee SET role_id = ? WHERE id = ?', [response.chooseEmployeeRoleId, response.chooseEmployeeId])
             
-            connection.query('SELECT * from role', (err, res) => {
+            connection.query('SELECT * from employee', (err, res) => {
             if(err) throw err
             console.table(res)
           })
