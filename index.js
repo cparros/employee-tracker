@@ -36,10 +36,10 @@ const start = () => {
       type: "list",
       message:
         "WELCOME to your employee tracking system! Would you like to [VIEW], [ADD], or [UPDATE] a department, role, or employee?",
-      choices: ["VIEW", "ADD", "UPDATE"],
+      choices: ["VIEW", "ADD", "UPDATE", "END"],
     })
     .then((response) => {
-      console.log(response);
+      
 
       //VIEW Selection
       if (response.chooseAction === "VIEW") {
@@ -51,12 +51,13 @@ const start = () => {
             choices: ["Departments", "Roles", "Employees"],
           })
           .then((response) => {
-            console.log(response.chooseView);
+            
             //View Depts
             if (response.chooseView === "Departments") {
               connection.query("SELECT * FROM department", (err, res) => {
                 if (err) throw err;
                 console.table(res);
+                start()
               });
             }
 
@@ -65,6 +66,7 @@ const start = () => {
               connection.query("SELECT * FROM role", (err, res) => {
                 if (err) throw err;
                 console.table(res);
+                start()
               });
             }
 
@@ -73,15 +75,16 @@ const start = () => {
               connection.query("SELECT * FROM employee", (err, res) => {
                 if (err) throw err;
                 console.table(res);
+                start()
               });
             }
-            connection.end();
+           
           });
       }
 
       //Employee chooses to ADD something
       if (response.chooseAction === "ADD") {
-        console.log(response);
+      
         inquirer
           .prompt({
             name: "chooseAdd",
@@ -91,7 +94,7 @@ const start = () => {
           })
           .then((response) => {
             //Chooses to add Departments
-            console.log(response.chooseAdd);
+        
             if (response.chooseAdd === "Departments") {
               inquirer
                 .prompt({
@@ -105,12 +108,12 @@ const start = () => {
                     [response.deptName],
                     (err, res) => {
                       if (err) throw err;
-                      console.table(res);
                       connection.query(
                         "SELECT * FROM department",
                         (err, res) => {
                           if (err) throw err;
                           console.table(res);
+                          start()
                         }
                       );
                     }
@@ -123,18 +126,8 @@ const start = () => {
               inquirer
                 .prompt([
                   {
-                    type: "list",
-                    message: "Please enter the roles's title.",
-                    choices: [
-                      "Sales Lead",
-                      "Sales Person",
-                      "Lead Engineer",
-                      "Software Engineer",
-                      "Account Manager",
-                      "Accountant",
-                      "Legal Team Lead",
-                      "Lawyer",
-                    ],
+                    type: "input",
+                    message: "Please enter new the roles's title.",
                     name: "roleTitle",
                   },
                   {
@@ -150,7 +143,6 @@ const start = () => {
                   },
                 ])
                 .then((response) => {
-                  console.log(response);
 
                   connection.query(
                     "INSERT INTO role ( title, salary, department_id) VALUE (?,?,?)",
@@ -161,6 +153,7 @@ const start = () => {
                       connection.query("SELECT * from role", (err, res) => {
                         if (err) throw err;
                         console.table(res);
+                        start()
                       });
                     }
                   );
@@ -206,6 +199,7 @@ const start = () => {
                       connection.query("SELECT * FROM employee", (err, res) => {
                         if (err) throw err;
                         console.table(res);
+                        start()
                       });
                     }
                   );
@@ -232,20 +226,20 @@ const start = () => {
                 .prompt([
                   {
                     type: "list",
-                    message: "What department would you like to update?",
+                    message: "What department name would you like to update?",
                     choices: ["Sales", "Legal", "Finance", "Engineering"],
                     name: "chooseDepartment",
                   },
                   {
                     type: "input",
-                    message: "Please enter the desired update",
+                    message: "Please enter the desired update.",
                     name: "enterDeptChange",
                   },
                 ])
                 .then((response) => {
                   connection.query(
                     "UPDATE department SET name = ? WHERE name = ?",
-                    [response.enterDeptChange, response.enterDeptChange],
+                    [response.enterDeptChange, response.chooseDepartment],
                     (err, res) => {
                       if (err) throw err;
                       console.log("Update successful!");
@@ -255,6 +249,7 @@ const start = () => {
                   connection.query("SELECT * from department", (err, res) => {
                     if (err) throw err;
                     console.table(res);
+                    start()
                   });
                 });
             }
@@ -307,6 +302,7 @@ const start = () => {
                   connection.query("SELECT * from role", (err, res) => {
                     if (err) throw err;
                     console.table(res);
+                    start()
                   });
                 });
             }
@@ -347,11 +343,18 @@ const start = () => {
                   connection.query("SELECT * from employee", (err, res) => {
                     if (err) throw err;
                     console.table(res);
+                    start()
                   });
                 });
             }
           });
       }
+
+      if (response.chooseAction === "END") {
+        connection.end()
+      }
+
+
     });
 };
 
