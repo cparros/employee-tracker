@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const inquirer = require("inquirer");
 var figlet = require("figlet");
+const { clear } = require("console")
 
 //Add box lettering
 figlet("Employee \n Tracker!", function (err, data) {
