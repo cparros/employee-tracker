@@ -7,7 +7,7 @@ Future updates will include budget funcinality, as well as updating and viewing 
 
 It is a part of UNC Coding Bootcamp and is practice in writing and using mysql.
 
-[Instructional Video](Video will go here)
+[Instructional Video](https://drive.google.com/file/d/1YuO77Px5q7F109UyHtKCR1-57nqNY8kQ/view)
 
 ## Installation
 
@@ -17,7 +17,7 @@ Use: npm i mysql
 ## Starting Application
 Start: npm Start
 
-![screenshot](gif will go here)
+![screenshot](./assets/Employee-Tracker2.gif)
 
 ## Questions
 Celparros@gmail.com
